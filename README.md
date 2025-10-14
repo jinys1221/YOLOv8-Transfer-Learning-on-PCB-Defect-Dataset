@@ -20,17 +20,17 @@ YOLO 학습 결과는 기본적으로 C:\Users\jinhyeongsik\runs\detect 경로�
 | 항목 | 설명 |
 |------|------|
 | **Loss Curve** | 훈련 과정에서 손실이 안정적으로 감소하며 수렴함. |
-| **Precision-Recall Curve** | mAP@0.5 = **0.977**, 클래스별 평균 0.98 이상의 높은 정밀도 |
+| **Precision-Recall Curve** | mAP@0.5 = **0.989**, 클래스별 평균 0.98 이상의 높은 정밀도 |
 | **Confusion Matrix** | 클래스 간 혼동이 적고, `spur` ↔ `short` 외엔 명확하게 분리됨 |
 | **BoxPR Curve** | Bounding Box 탐지 성능도 안정적이며, recall이 높을수록 precision 유지됨 |
 
 <p align="center">
   <img src="runs/detect/train/results.png" width="600"><br>
-  <em>모델 학습 및 손실 곡선</em>
+  <em>모델 학습 및 손실 곡선(6·7·8번째 이미지)</em>
 </p>
 
 <p align="center">
-  <img src="runs/detect/train/PR_curve.png" width="600"><br>
+  <img src="runs/detect/train/BoxPR_curve.png" width="600"><br>
   <em>Precision-Recall Curve</em>
 </p>
 
