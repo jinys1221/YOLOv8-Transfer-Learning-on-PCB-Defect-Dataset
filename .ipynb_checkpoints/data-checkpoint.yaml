@@ -1,0 +1,13 @@
+# DeepPCB YOLO dataset configuration
+train: D:/project/anomaly detection/PCBData/DeepPCB/train/images
+val: D:/project/anomaly detection/PCBData/DeepPCB/valid/images
+test: D:/project/anomaly detection/PCBData/DeepPCB/test/images
+
+nc: 6
+names:
+  - missing_hole
+  - mouse_bite
+  - open_circuit
+  - short
+  - spur
+  - spurious_copper
