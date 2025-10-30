@@ -1,10 +1,19 @@
 ## 개요
 
-이 프로젝트는 PCB(Printed Circuit Board) 결함을 자동으로 탐지하는 **YOLO기반 Anomaly Detection 시스템**입니다. 기존 COCO 사전학습 모델로는 PCB 회로판을 `traffic light`, `kite`등 엉뚱하게 탐지하였는데 `data.yaml`파일에 존재하는 6개의 결함 클래스에 대한 이미지와 라벨들을 제공함으로써 PCB 결함 클래스만을 대상으로 **fine-tuning**을 수행하였습니다.
+이 프로젝트는 **YOLOv8 기반 전이학습**(**Transfer Learning**)을 통해
+**PCB**(**Printed Circuit Board**) **이미지 내 결함을 자동으로 탐지하는 시스템**입니다.
 
-- 목적: 회로판 이미지 영역속 결함 예측
-- 사용한 결함 클래스(6종): `missing_hole`, `mouse_bite`, `open_circuit`, `short`, `spur`, `spurious_copper`
-- 데이터셋 출처: [PCB Defect Detection Dataset](https://www.kaggle.com/datasets/liuxiaolong1/pcb-defect-detection-dataset) by LIU XIAO LONG1
+기존 COCO 사전학습 모델은 일반 사물 탐지를 위해 학습되어 있어,
+PCB 회로판 이미지를 traffic light, kite 등으로 잘못 인식하는 문제가 있었습니다.
+이에 따라, 6개의 결함 클래스(missing_hole, mouse_bite, open_circuit, short, spur, spurious_copper)에 대한
+이미지와 라벨을 제공하여 fine-tuning을 수행함으로써,
+모델이 PCB 도메인에 특화된 결함 특징을 학습하고 정확하게 탐지할 수 있도록 개선했습니다.
+
+목적: 회로판 이미지 영역 내 결함을 자동 탐지 및 분류
+
+사용 클래스(6종): missing_hole, mouse_bite, open_circuit, short, spur, spurious_copper
+
+데이터셋 출처: PCB Defect Detection Dataset by LIU XIAO LONG1
 
 ## 기타 개선 사항
 
