@@ -35,7 +35,7 @@ YOLO 학습 결과는 기본적으로 C:\Users\jinhyeongsik\runs\detect 경로�
 </p>
 
 <p align="center">
-  <img src="runs/detect/train/BoxPR_curve" width="600"><br>
+  <img src="runs/detect/train/BoxPR_curve.png" width="600"><br>
   <em>Precision-Recall Curve</em>
 </p>
 
