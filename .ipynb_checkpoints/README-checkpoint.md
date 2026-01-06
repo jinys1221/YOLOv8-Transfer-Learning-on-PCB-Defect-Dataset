@@ -22,7 +22,7 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 
     1. COCO 데이터셋으로 사전학습된 YOLOv8 모델을 사용하여 PCB 회로판 이미지에 대해 초기 예측을 수행함.
 <p align="center">
-      <img src="train/images/01_PCB__1.jpg" width="600"><br>
+      <img src="Image_results/COCO Model.jpg" width="400"><br>
       <em>Before training</em>
 </p>
     
@@ -41,9 +41,10 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
   <img src="valid/images/01_PCB__966.jpg" width="200">
 </p>
 
-    3. 해당 데이터셋 기반으로 YOLOv8 모델을 추가 훈련함.
-    4. 대다수의 클래스에 대해 예측을 잘하지만 short ↔ spur 혼동이 많아 해당 클래스에 대해 표본을 복사하여 재훈련함.
-## 모델 성능 분석
+    3. PCB 결함 데이터셋을 기반으로 YOLOv8 모델을 Fine-tuning하여, 사전학습 모델이 PCB 도메인 특화 결함 특징을 학습하도록 함.
+    4. 1차 Fine-tuning 결과, 대다수 결함 클래스에 대해 안정적인 탐지 성능을 보이지만, 'short'와 'spur' 클래스 간 혼동이 빈번하게 발생함. 이에 따라 해당 두 클래스의 학습 표본을 복사하여 데이터 리샘플링을 적용한 후 클래스 불균형 완화를 목표로 추가 Fine-tuning 실험을 진행함.
+     
+## 1차 Fine-tuning 후 모델 성능 분석
 
 모델의 훈련 및 검증 결과를 시각화하여 탐지 성능을 분석했습니다.
 
@@ -72,8 +73,8 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 
 <table align="center">
   <tr>
-    <td align="center"><b>Before</b></td>
-    <td align="center"><b>After Fine-tuning</b></td>
+    <td align="center"><b>Baseline Fine-tuning</b></td>
+    <td align="center"><b>Fine-tuning with Data Balancing<br>(Short / Spur Augmented)</b></td>
   </tr>
   <tr>
     <td align="center">
