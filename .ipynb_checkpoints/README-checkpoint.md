@@ -70,12 +70,12 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
     
     4. 1차 Fine-tuning 결과, 대다수 결함 클래스에 대해 안정적인 탐지 성능을 보이지만, 'short'와 'spur' 클래스 간 혼동이 빈번하게 발생함. 이에 따라 해당 두 클래스의 학습 표본을 복사하여 데이터 리샘플링을 적용한 후 클래스 불균형 완화를 목표로 추가 Fine-tuning 실험을 진행함.
 
-## **데이터 리샘플링 Fine-tuning 결과 비교**
+## **Data Resampling 기반 Fine-tuning 결과 비교**
 
 <table align="center">
   <tr>
     <td align="center"><b>Baseline Fine-tuning</b></td>
-    <td align="center"><b>Resampling<br>(Short / Spur Augmented)</b></td>
+    <td align="center"><b>Data Resampling<br>(Short / Spur Augmented)</b></td>
   </tr>
   <tr>
     <td align="center">
@@ -87,7 +87,7 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
   </tr>
 </table>
 
-| **클래스** | **Baseline** | **Resampling** | **해석** |
+| **클래스** | **Baseline** | **Data Resampling** | **해석** |
 |------|------| ------| ------|
 | **short** | 정확도 0.90, <br> background로 0.40 오인 | 정확도 0.89, <br> background로 0.49 오인 | **더 나빠짐**, 오히려 더 많은 short를 <br>background로 놓침(False Negative 증가) |
 | **Spur** | 정확도 0.95, <br> background로 0.29 오인 | 정확도 0.94, <br> background로 0.29 오인 | 아주 조금 떨어졌으나 거의 차이 없음 |
@@ -96,7 +96,7 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 | **background** | short 0.40, <br> 나머지 | short 0.49, <br> 나머지 감소 | **배경 노이즈 영향 커짐** |
 
 ## **원인 및 해석**
-1. **데이터 리샘플링에 따른 편향 및 다양성 손실**
+1. **Data Resampling에 따른 편향 및 다양성 손실**
     - `short`, `spur`데이터만 중복·강화하면서 전체 클래스 분포가 깨졌고, <br> 그 결과 모델이 **배경과 결함 경계를 혼동**하거나 **다른 클래스의 특징을 잃는 현상(FN 증가)** 이 발생함.
     - 또한 동일 이미지의 반복 학습으로 **데이터 다양성이 감소**하여,<br> fine-tuning 과정에서 **과적합(Overfitting)** 이 유발된 것으로 추정됨.
 2. **freeze 설정 영향**
@@ -106,17 +106,17 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 본 프로젝트에서 시행한 두 단계의 Fine-tuning 실험 결과는 다음과 같습니다:
 
 - **Baseline**: 사전학습 모델에서 PCB 결함 특징을 탐지하도록 훈련한 모델 
-- **Resampling**: 특정 클래스(short, spur)를 리샘플링한 모델  
+- **Data Resampling**: 특정 클래스(short, spur)를 리샘플링한 모델  
 
-| 지표 | Baseline | Resampling |
+| 지표 | Baseline | Data Resampling |
 |------|--------|-------|
 | mAP@0.5 | **0.956** | **0.933** |
 | short 클래스 정확도 | 0.90 | 0.89 |
 | spur 클래스 정확도 | 0.95 | 0.94 |
 
-> **Note:** 대부분 클래스에서 성능이 오히려 하락하였음을 확인했고, 이는 **데이터 리샘플링에 의한 편향**, **백본 Freeze 전략 미흡** 등이 주요 원인으로 분석됩니다.
+> **Note:** 대부분 클래스에서 성능이 오히려 하락하였음을 확인했고, 이는 **Data Resampling에 의한 편향**, **백본 Freeze 전략 미흡** 등이 주요 원인으로 분석됩니다.
 
 ## **마무리**
 본 프로젝트는 **전이학습(Transfer Learning)** 이 항상 성능을 향상시키지는 않음을 보여준다.
-특정 클래스 **리샘플링**과 `freeze` 전략은 오히려 분포 편향/과적합을 유발하여 mAP50이 소폭 하락했다.
+특정 클래스 **Data Resampling**과 **freeze** 전략은 오히려 분포 편향/과적합을 유발하여 mAP50이 소폭 하락했다.
 향후에는 **데이터 균형 조정**, **freeze 완화**를 통해 개선 여지를 확인했다.
