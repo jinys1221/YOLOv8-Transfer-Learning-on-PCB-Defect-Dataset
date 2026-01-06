@@ -20,9 +20,9 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 
 ## 프로젝트 진행 흐름
 
-    1. COCO 데이터셋으로 사전학습된 YOLOv8 모델을 사용하여 교통 영상 이미지에 대해 초기 예측을 수행함.
+    1. COCO 데이터셋으로 사전학습된 YOLOv8 모델을 사용하여 PCB 회로판 이미지에 대해 초기 예측을 수행함.
 <p align="center">
-      <img src="Image_results/Before training.jpg" width="600"><br>
+      <img src="train/images/01_PCB__1.jpg" width="600"><br>
       <em>Before training</em>
 </p>
     
@@ -41,39 +41,8 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
   <img src="valid/images/01_PCB__966.jpg" width="200">
 </p>
 
-<p align="center">
-  <em>Top-view(탑뷰) 차량 데이터셋</em>
-</p>
-
-    3. 해당 데이터셋을 기반으로 YOLOv8 모델을 추가 훈련함.
-    4. 기존 COCO 사전학습 모델로 예측했던 동일 이미지에 대해, 학습된 모델로 다시 예측을 수행하여 성능 변화를 비교함.
-| Before Training | After Training |
-|---|---|
-| <img src="Image_results/Before training.jpg" width="400"> | <img src="Image_results/After training.jpg" width="400"> |
-
-    5. 학습 후에 성능이 좋아지긴 했지만 일부 원거리 차량 및 작은 객체 검출 한계가 존재하여, 성능 향상을 위해 다음과 같은 개선을 시도함.
-       - 추론 시 입력 이미지 해상도 확장
-       - GPU 제약 범위 내에서 훈련 이미지 크기 확장
-       - 고해상도 이미지에 대한 타일 기반 추론 적용
-| 추론시 이미지 확장 | GPU 제약 범위 내에서 훈련 이미지 크기 확장 | 고해상도 이미지에 대한 타일 기반 추론 적용 |
-|---|---|---|
-| <img src="Image_results/High-resolution Inference.jpg" width="250"> | <img src="Image_results/Training Image Size Expansion.jpg" width="250"> | <img src="Image_results/tiled inference 8tiles.jpg" width="250"> |
-
-    6. 위 개선 과정을 거쳐 학습된 최적의 모델(best model)을 사용하여 동영상 추론을 수행함.
-  
-아래 이미지는 결과 영상의 일부 프레임 캡처입니다:
-![Sample Result](Video_results/frame_sample1.jpg)
-➡ 전체 결과 영상은 아래 파일에서 확인할 수 있습니다.
--[processed_sample_video.mp4](Video_results/processed_sample_video.mp4)
-
-    7. 동영상 추론 결과를 기반으로, 관심 영역(ROI)을 통과하는 차량을 Tracking ID를 이용해 누적 집계하여 교통량을 산출함.
- 
-아래 이미지는 결과 영상의 일부 프레임 캡처입니다:
-![Sample Result](Video_results/frame_sample2.jpg)
-➡ 전체 영상은 아래에서 확인할 수 있습니다.
-- [traffic_density_analysis.mp4](results/traffic_density_analysis.mp4)
-
-
+    3. 해당 데이터셋 기반으로 YOLOv8 모델을 추가 훈련함.
+    4. 대다수의 클래스에 대해 예측을 잘하지만 short ↔ spur 혼동이 많아 해당 클래스에 대해 표본을 복사하여 재훈련함.
 ## 모델 성능 분석
 
 모델의 훈련 및 검증 결과를 시각화하여 탐지 성능을 분석했습니다.
