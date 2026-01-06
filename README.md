@@ -43,7 +43,7 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 
     3. PCB 결함 데이터셋을 기반으로 YOLOv8 모델을 Fine-tuning하여, 사전학습 모델이 PCB 도메인 특화 결함 특징을 학습하도록 함.
 <p align="center">
-      <img src="Image_results/Baseline_Fine_tuning.jpg" width="400"><br>
+      <img src="Image_results/Baseline Fine tuning.jpg" width="400"><br>
       <em>Baseline Fine tuning</em>
 </p>     
 ## Baseline Fine-tuning 후 모델 성능 분석
