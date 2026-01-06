@@ -42,7 +42,6 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 </p>
 
     3. PCB 결함 데이터셋을 기반으로 YOLOv8 모델을 Fine-tuning하여, 사전학습 모델이 PCB 도메인 특화 결함 특징을 학습하도록 함.
-    4. 1차 Fine-tuning 결과, 대다수 결함 클래스에 대해 안정적인 탐지 성능을 보이지만, 'short'와 'spur' 클래스 간 혼동이 빈번하게 발생함. 이에 따라 해당 두 클래스의 학습 표본을 복사하여 데이터 리샘플링을 적용한 후 클래스 불균형 완화를 목표로 추가 Fine-tuning 실험을 진행함.
      
 ## 1차 Fine-tuning 후 모델 성능 분석
 
@@ -68,13 +67,15 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 | **Loss Curve** | 훈련 과정에서 손실이 안정적으로 감소하며 수렴함. |
 | **Precision-Recall Curve** | mAP@0.5 = **0.989**, 클래스별 평균 0.98 이상의 높은 정밀도 |
 | **Confusion Matrix** | 클래스 간 혼동이 적고, `spur` ↔ `short` 외엔 명확하게 분리됨 |
+    
+    4. 1차 Fine-tuning 결과, 대다수 결함 클래스에 대해 안정적인 탐지 성능을 보이지만, 'short'와 'spur' 클래스 간 혼동이 빈번하게 발생함. 이에 따라 해당 두 클래스의 학습 표본을 복사하여 데이터 리샘플링을 적용한 후 클래스 불균형 완화를 목표로 추가 Fine-tuning 실험을 진행함.
 
-## **Fine-tuning 전후 실험 비교**
+## **데이터 리샘플링 Fine-tuning 결과 비교**
 
 <table align="center">
   <tr>
     <td align="center"><b>Baseline Fine-tuning</b></td>
-    <td align="center"><b>Fine-tuning with Data Balancing<br>(Short / Spur Augmented)</b></td>
+    <td align="center"><b>Resampling<br>(Short / Spur Augmented)</b></td>
   </tr>
   <tr>
     <td align="center">
@@ -86,7 +87,7 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
   </tr>
 </table>
 
-| **클래스** | **Before** | **After Fine-tuning** | **해석** |
+| **클래스** | **Baseline** | **Resampling** | **해석** |
 |------|------| ------| ------|
 | **short** | 정확도 0.90, <br> background로 0.40 오인 | 정확도 0.89, <br> background로 0.49 오인 | **더 나빠짐**, 오히려 더 많은 short를 <br>background로 놓침(False Negative 증가) |
 | **Spur** | 정확도 0.95, <br> background로 0.29 오인 | 정확도 0.94, <br> background로 0.29 오인 | 아주 조금 떨어졌으나 거의 차이 없음 |
@@ -97,17 +98,17 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 ## **원인 및 해석**
 1. **데이터 리샘플링에 따른 편향 및 다양성 손실**
     - `short`, `spur`데이터만 중복·강화하면서 전체 클래스 분포가 깨졌고, <br> 그 결과 모델이 **배경과 결함 경계를 혼동**하거나 **다른 클래스의 특징을 잃는 현상(FN 증가)** 이 발생함.
-    - 또한 동일 이미지의 반복 학습으로 **데이터 다양성이 감소**하여,<br> fune-tuning 과정에서 **과적합(Overfitting)** 이 유발된 것으로 추정됨.
+    - 또한 동일 이미지의 반복 학습으로 **데이터 다양성이 감소**하여,<br> fine-tuning 과정에서 **과적합(Overfitting)** 이 유발된 것으로 추정됨.
 2. **freeze 설정 영향**
     - 백본을 고정하고 헤드만 업데이트했기 때문에 <br>기존 피처맵은 그대로인데, **새로 추가된 데이터 특성을 충분히 반영하지 못했을 가능성**
 
 ## **결과 요약**
 본 프로젝트에서 시행한 두 단계의 Fine-tuning 실험 결과는 다음과 같습니다:
 
-- **Before Fine-tuning**: 사전학습 모델에서 PCB 결함 특징을 탐지하도록 훈련한 모델 
-- **After Fine-tuning (리샘플링)**: 특정 클래스(short, spur)를 리샘플링한 모델  
+- **Baseline**: 사전학습 모델에서 PCB 결함 특징을 탐지하도록 훈련한 모델 
+- **Resampling**: 특정 클래스(short, spur)를 리샘플링한 모델  
 
-| 지표 | Before | After |
+| 지표 | Baseline | Resampling |
 |------|--------|-------|
 | mAP@0.5 | **0.956** | **0.933** |
 | short 클래스 정확도 | 0.90 | 0.89 |
