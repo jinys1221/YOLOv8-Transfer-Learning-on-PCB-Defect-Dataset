@@ -42,8 +42,11 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 </p>
 
     3. PCB 결함 데이터셋을 기반으로 YOLOv8 모델을 Fine-tuning하여, 사전학습 모델이 PCB 도메인 특화 결함 특징을 학습하도록 함.
-     
-## 1차 Fine-tuning 후 모델 성능 분석
+<p align="center">
+      <img src="Image_results/Baseline_Fine_tuning.jpg" width="400"><br>
+      <em>Baseline Fine tuning</em>
+</p>     
+## Baseline Fine-tuning 후 모델 성능 분석
 
 모델의 훈련 및 검증 결과를 시각화하여 탐지 성능을 분석했습니다.
 
@@ -68,7 +71,7 @@ PCB(Printed Circuit Board) 회로판 이미지를 traffic light, kite 등과 같
 | **Precision-Recall Curve** | mAP@0.5 = **0.989**, 클래스별 평균 0.98 이상의 높은 정밀도 |
 | **Confusion Matrix** | 클래스 간 혼동이 적고, `spur` ↔ `short` 외엔 명확하게 분리됨 |
     
-    4. 1차 Fine-tuning 결과, 대다수 결함 클래스에 대해 안정적인 탐지 성능을 보이지만, 'short'와 'spur' 클래스 간 혼동이 빈번하게 발생함. 이에 따라 해당 두 클래스의 학습 표본을 복사하여 데이터 리샘플링을 적용한 후 클래스 불균형 완화를 목표로 추가 Fine-tuning 실험을 진행함.
+    4. Baseline Fine-tuning 결과, 대다수 결함 클래스에 대해 안정적인 탐지 성능을 보이지만, 'short'와 'spur' 클래스 간 혼동이 빈번하게 발생함. 이에 따라 해당 두 클래스의 학습 표본을 복사하여 데이터 리샘플링을 적용한 후 클래스 불균형 완화를 목표로 추가 Fine-tuning 실험을 진행함.
 
 ## **Data Resampling 기반 Fine-tuning 결과 비교**
 
